@@ -1,0 +1,35 @@
+package no.ktw.awesome;
+
+import com.sun.jersey.api.client.Client;
+import com.yammer.dropwizard.Service;
+import com.yammer.dropwizard.client.JerseyClientBuilder;
+import com.yammer.dropwizard.config.Bootstrap;
+import com.yammer.dropwizard.config.Environment;
+import no.ktw.awesome.resource.AwesomeResource;
+
+/**
+ *
+ * @author ktw
+ */
+public class AwesomeApp extends Service<AwesomeConfiguration> {
+
+    public static void main(String[] args) throws Exception {
+        new AwesomeApp().run(args);
+    }
+
+    @Override
+    public void initialize(Bootstrap<AwesomeConfiguration> bootstrap) {
+        bootstrap.setName("awesome-app");
+    }
+
+    @Override
+    public void run(AwesomeConfiguration config, Environment environment) throws Exception {
+
+        final Client client = new JerseyClientBuilder().using(config.getJerseyClientConfiguration())
+                .using(environment)
+                .build();
+
+        environment.addResource(new AwesomeResource(client));
+    }
+
+}
