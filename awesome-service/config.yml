@@ -1,3 +1,11 @@
 http:
   port: 8080
   adminPort: 8080
+
+oauthCfg:
+  - name: googleplus
+    prefix: googleapis.com
+    key: 850221046063-4soev6sl5pruquo1h252tvenunqceoov.apps.googleusercontent.com
+    secret: uOoD80DML5p1sT6TzSqZZ5w6
+    permissions: https://www.googleapis.com/auth/userinfo.profile,email
+    ## Valid permissions/scopes from: http://support.google.com/a/bin/answer.py?hl=en&answer=162106

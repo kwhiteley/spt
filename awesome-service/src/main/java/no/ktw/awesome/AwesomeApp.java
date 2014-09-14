@@ -6,6 +6,11 @@ import com.yammer.dropwizard.client.JerseyClientBuilder;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import no.ktw.awesome.resource.AwesomeResource;
+import no.ktw.awesome.security.OpenIDAuthenticator;
+import no.ktw.awesome.security.OpenIDRestrictedToProvider;
+import no.ktw.awesome.security.PublicOAuthResource;
+import no.ktw.awesome.security.User;
+import org.eclipse.jetty.server.session.SessionHandler;
 
 /**
  *
@@ -28,8 +33,20 @@ public class AwesomeApp extends Service<AwesomeConfiguration> {
         final Client client = new JerseyClientBuilder().using(config.getJerseyClientConfiguration())
                 .using(environment)
                 .build();
-
+        
         environment.addResource(new AwesomeResource(client));
+        environment.addResource(new PublicOAuthResource(config));
+        
+        environment.setSessionHandler(new SessionHandler());
+        
+        // Configure authenticator
+        OpenIDAuthenticator authenticator = new OpenIDAuthenticator();
+        
+        environment.addProvider(new OpenIDRestrictedToProvider<User>(
+                authenticator, "OpenID"));        
+//        environment.addProvider(new OAuthProvider<UserInfo>());
+        
+//        GoogleAuthExample example = new GoogleAuthExample();
     }
 
 }
